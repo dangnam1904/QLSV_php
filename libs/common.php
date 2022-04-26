@@ -1,4 +1,7 @@
 <?php
+$db;
+require_once("config.php");
+require_once("libs/db.php");
 
 function auto_login(){
 		$db = $GLOBALS["db"];
@@ -42,4 +45,38 @@ function auto_login(){
 		}
 	}
 }
+
+/**
+ * insert, update, delete -> su dung function
+ */
+function execute($sql) {
+	//create connection toi database
+	$db = $GLOBALS["db"];
+	//query
+	$db-> $sql;  
+
+	//dong connection
+	
+}
+
+/**
+ * su dung cho lenh select => tra ve ket qua
+ */
+function executeResult($sql) {
+	//create connection toi database
+	$db = $GLOBALS["db"];
+
+	//query
+	$resultset = mysqli_query($db, $sql);
+	$list      = [];
+	while ($row = mysqli_fetch_array($resultset, 1)) {
+		$list[] = $row;
+	}
+
+	//dong connection
+	mysqli_close($db);
+
+	return $list;
+}
 ?>
+

@@ -2,72 +2,20 @@
 
 <div class="group-box">
 	<div align="center">
-	<div class="title">SINH VIÊN</div>
-	<?php 
-		$maLop="";
-		// lấy mã lớp chọn từ DropDownList
-		if (isset($_POST["MaLop"])){
-			$maLop= $_POST["MaLop"];
-		}	
-	?>
+	<div class="title">Môn Học</div>
+
 		
 	<?php 
-		// kiểm tra xóa nhiều dòng
-		if (isset($_POST["btnXoaTatCa"]) && isset($_POST["chkmasv"])){
-			$in = "''"; 
-			foreach($_POST["chkmasv"] as $val){				
-				$in .= ",'".$val."'";			 
-			}
-			$sql = "DELETE FROM dbo_sinhvien WHERE MaSV IN(".$in.")";
-			
-			$result = $db->query($sql);
-			if ($result && $db->affected_rows > 0){ 
-				echo "<div class='success'>Đã xóa thành công</div>";
-			}else{
-				echo "<div class='error'>Có lỗi xảy ra khi xóa.</div>";
-			}		
-		}
 		
-		//kiểm tra trường hợp xóa 1 dòng (nhấn nút xóa bên phải)
-		if (isset($_POST["btnXoa"])){
-			$masv = $_POST["btnXoa"];
-			$sql = "DELETE FROM dbo_sinhvien WHERE MaSV='".$masv."'";
-			$result = $db->query($sql);
-			if ($result && $db->affected_rows > 0){ 
-				echo "<div class='success'>Đã xóa thành công</div>";
-			}else{
-				echo "<div class='error'>Có lỗi xảy ra khi xóa.</div>";
-			}
-		}	
+		
+	
 	?>
-		<form method="post" name="frmSV" action="<?php echo $_SERVER["PHP_SELF"];?>">			
-			<label>Chọn lớp:</label>
-			<select name="MaLop">
-				<option value="">--chọn--</option>
-				<?php 
-				// IN danh sách lớp
-				$sql ="SELECT * FROM dbo_lopchuyennganh ORDER BY MaCN";
-				$result = $db->query($sql);
-				if ($result){
-					while($row = $result->fetch_array()){
-						echo "<option value='".$row["MaLop"]."'";
-					// nếu lớp trùng với lớp đã chọn, đánh dấu chọn trong ds
-					if($row["MaLop"] == $maLop){
-						echo " selected ";
-					}
-				 echo ">";
-				echo $row["TenLop"]."</option>";
-					}
-				}
-				$result->free();
-				?>							
-			</select>
-			<button type="submit" class="btn"> Hiển Thị </button>
-			<br />			
-			<hr>
+		<form method="post" name="" action="<?php echo $_SERVER["PHP_SELF"];?>">			
+		
+				
 			<?php 
 			// tính tổng số dòng 
-			$sql = "SELECT COUNT(*) FROM dbo_sinhvien WHERE MaLop='".$maLop."'";
+			$sql = "SELECT COUNT(*) FROM dbo_monhoc ";
 			$result = $db->query($sql);
 			$total_row = 0;
 			if ($result){
@@ -149,8 +97,9 @@
 			// vị trí bắt đầu SELECT trong CSDL
 			$start_row = $current_page==1?0:($current_page-1)*$limit;
 			 
-			$sql = "SELECT * FROM dbo_sinhvien WHERE MaLop='".$maLop."' LIMIT $start_row, $limit";
-			$result = $db->query($sql);			 
+			$sql = "SELECT * FROM dbo_monhoc  mh join  dbo_khoa  k on mh.makhoa=k.makhoa order by mamh  LIMIT $start_row, $limit ";
+			$result = $db->query($sql);		
+           
 			// nếu có dữ liệu thì hiển thị danh sách
 			
 			if ($result && $result->num_rows>0){
@@ -159,14 +108,15 @@
 			<!-- in tiêu đề danh sách -->
 				<thead>
 				<tr>
-					<th><input type="checkbox" onchange="checkAll(this.checked,'chkmasv')" /></th>
+				
 					<th>STT</th>
-					<th>MSSV</th>
-					<th>Họ tên</th>
-					<th>Ngày Sinh</th>
-					<th>Quê quán</th>
-					<th>Email</th>	
-					<th>Chỉnh sửa</th>					
+					<th  style="width:70px">Mã môn</th>
+					<th  style="width:200px">Tên môn học </th>
+					<th style="width:70px">Số tín chỉ</th>
+					<th style="width:100px">Số tiết LT</th>
+                    <th style="width:100px">Số tiết TH</th>
+					<th style="width:70px">Mã Khoa</th>
+					<th style="width:250px">Tên Khoa</th>
 				</tr>  
 			 </thead>
 			 <!-- end in tiêu đề-->
@@ -174,21 +124,19 @@
 			 <tbody>
 				<?php 			
 					while($row = $result->fetch_array()){
+                       
+                     
+                        
 						echo "<tr >";
-							echo "<td><input name='chkmasv[]' onchange='selectedRow(this,this.checked)' value='".$row["MaSV"]."' class='chkmasv' type='checkbox'/> </td>";
+					
 							echo "<td>".++$start_row."</td>";
-							echo "<td>".$row["MaSV"]."</td>";
-							echo "<td>".$row["Holot"]." ".$row["Ten"]."</td>";
-							echo "<td>";
-							$d = strtotime($row["NgaySinh"]);
-							echo date("d-m-Y",$d);
-							echo "</td>";
-							echo "<td>".$row["QueQuan"]."</td>";
-							echo "<td>".$row["Email"]."</td>";
-							echo "<td>"; 
-								echo "<button type='submit' formmethod='post' form='frmNoAction' name='MaSV' value='".$row["MaSV"]."' formaction='sinhvien_edit.php?sid=".session_id()."'><img src='".IMAGES_DIR."/edit.png' /></button>";
-								echo "&nbsp; <button type='submit' name='btnXoa' value='".$row["MaSV"]."' onclick='return confirmDelete(this.value);'><img src='".IMAGES_DIR."/delete.png' /></button>";								
-							echo "</td>";
+							echo "<td>".$row["MaMH"]."</td>";
+							echo "<td>".$row["TenMH"]." </td>";
+                            echo "<td>".$row["SoTC"]." </td>";
+                            echo "<td>".$row["SoTietLT"]." </td>";
+                            echo "<td>".$row["SoTietTH"]." </td>";
+                            echo "<td>".$row["MaKhoa"]." </td>";
+                            echo "<td>".$row["TenKhoa"]." </td>";
 						echo "</tr>";
 					}
 					$result->free();
@@ -200,10 +148,7 @@
 			<tfoot>
 			<tr>
 				<td colspan="8">
-					<!--  hiển thị nút Xóa tất cả sau khi chọn nhiều dòng -->
-					<button type="submit" name="btnXoaTatCa" onclick="return confirmDeleteAll('chkmasv');" >
-						<img src="<?php echo IMAGES_DIR;?>/delete.png" />
-					</button>
+				
 					<!--  end xóa tất cả -->					
 				<?php 
 					// hiển thị nút "về trang đầu (First)"
@@ -266,8 +211,7 @@
 			<!--  end in footer của danh sách -->
 			</table>
 		<?php 
-			}elseif ($maLop !=""){
-				echo "<div class='success'> Không có sv nào. </div>";
+			
 			}
 		?>
 		<!--  form này không có tác dụng gì, chỉ dùng để chỉ ra nút Sửa ở cột bên phải bảng
