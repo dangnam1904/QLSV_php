@@ -19,8 +19,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `qldaotao`
 --
-CREATE DATABASE `qldaotao` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-USE `qldaotao`;
+CREATE DATABASE `qldt` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+USE `qldt`;
 
 -- --------------------------------------------------------
 
@@ -29,13 +29,15 @@ USE `qldaotao`;
 --
 
 CREATE TABLE IF NOT EXISTS `dbo_bcnkhoa` (
+ `id_bcnkhoa` int(5) auto_increment primary key,
   `MaGV` varchar(10) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `MaCV` varchar(10) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `MaKhoa` varchar(10) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `NhiemKy` varchar(9) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  PRIMARY KEY (`MaGV`,`MaCV`,`MaKhoa`,`NhiemKy`),
+  Key `MaGV` (`MaGV`),
   KEY `MaCV` (`MaCV`),
-  KEY `MaKhoa` (`MaKhoa`)
+  KEY `MaKhoa` (`MaKhoa`),
+  Key `NhiemKy` (`NhiemKy`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -57,9 +59,10 @@ INSERT INTO `dbo_bcnkhoa` (`MaGV`, `MaCV`, `MaKhoa`, `NhiemKy`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `dbo_chucvu` (
+ `id_chucvu` int(5) auto_increment primary key,
   `MaCV` varchar(10) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `TenCV` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`MaCV`)
+  key `MaCV` (`MaCV`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -79,10 +82,11 @@ INSERT INTO `dbo_chucvu` (`MaCV`, `TenCV`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `dbo_chuyennganh` (
+ `id_chuyennganh` int(5) auto_increment primary key,
   `MaCN` varchar(12) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `TenChuyenNganh` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `MaNganh` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`MaCN`),
+  KEY `MaCN` (`MaCN`),
   KEY `MaNganh` (`MaNganh`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -196,11 +200,14 @@ INSERT INTO `dbo_chuyennganh` (`MaCN`, `TenChuyenNganh`, `MaNganh`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `dbo_cvht` (
+ `id_cvht` int(5) auto_increment primary key,
   `MaLOP` varchar(10) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `MaGV` varchar(10) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `NhiemKy` varchar(9) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  PRIMARY KEY (`MaLOP`,`MaGV`,`NhiemKy`),
-  KEY `MaGV` (`MaGV`)
+  key `MaLOP` (`MaLOP`),
+
+  Key `MaGV` (MaGV),
+  key `NhiemKy` (NhiemKy)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -210,10 +217,11 @@ CREATE TABLE IF NOT EXISTS `dbo_cvht` (
 --
 
 CREATE TABLE IF NOT EXISTS `dbo_diemhp` (
+ `id_diemhp` int(5) auto_increment primary key,
   `MaSV` varchar(10) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `MaNhom` varchar(10) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `Diem` varchar(2) COLLATE utf8_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`MaSV`,`MaNhom`),
+   KEY `MaSV` (`MaSV`),
   KEY `MaNhom` (`MaNhom`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -224,6 +232,7 @@ CREATE TABLE IF NOT EXISTS `dbo_diemhp` (
 --
 
 CREATE TABLE IF NOT EXISTS `dbo_giangvien` (
+ `id_GV` int(5) auto_increment primary key,
   `MaGV` varchar(10) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `MaKhoa` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
   `MaHH` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -235,7 +244,7 @@ CREATE TABLE IF NOT EXISTS `dbo_giangvien` (
   `Email` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `QueQuan` longtext COLLATE utf8_unicode_ci,
   `MatKhau` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`MaGV`),
+   KEY `MaGV` (`MaGV`),
   KEY `MaKhoa` (`MaKhoa`),
   KEY `MaHH` (`MaHH`),
   KEY `MaHV` (`MaHV`)
@@ -296,9 +305,10 @@ INSERT INTO `dbo_giangvien` (`MaGV`, `MaKhoa`, `MaHH`, `MaHV`, `HoLot`, `Ten`, `
 --
 
 CREATE TABLE IF NOT EXISTS `dbo_hocham` (
+ `id_hoc_ham` int(5) auto_increment primary key,
   `MaHH` varchar(10) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `TenHH` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`MaHH`)
+   KEY `MaHH` (`MaHH`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -316,9 +326,10 @@ INSERT INTO `dbo_hocham` (`MaHH`, `TenHH`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `dbo_hocvi` (
+ `id_hoc_vi` int(5) auto_increment primary key,
   `MaHV` varchar(10) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `TENHV` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`MaHV`)
+   KEY `MaHV` (`MaHV`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -340,12 +351,14 @@ INSERT INTO `dbo_hocvi` (`MaHV`, `TENHV`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `dbo_kehoachhttk` (
+ `id_kehoachhhttk` int(5) auto_increment primary key,
   `MaSV` varchar(10) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `NienKhoa` varchar(9) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `HocKy` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `MaMH` varchar(10) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `HocLai` bit(1) NOT NULL,
-  PRIMARY KEY (`MaSV`,`NienKhoa`,`HocKy`,`MaMH`),
+  KEY `MaSV`(`MaSV`), 
+ 
   KEY `NienKhoa` (`NienKhoa`),
   KEY `MaMH` (`MaMH`),
   KEY `HocKy` (`HocKy`)
@@ -358,10 +371,11 @@ CREATE TABLE IF NOT EXISTS `dbo_kehoachhttk` (
 --
 
 CREATE TABLE IF NOT EXISTS `dbo_khoa` (
+ `id_khoa` int(5) auto_increment primary key,
   `MaKhoa` varchar(10) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `TenKhoa` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `NgayTL` date DEFAULT NULL,
-  PRIMARY KEY (`MaKhoa`)
+  KEY `MaKhoa` (`MaKhoa`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -420,12 +434,13 @@ INSERT INTO `dbo_khoahoc` (`Khoa`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `dbo_khungctdt` (
+ `id_khungctdt` int(5) auto_increment primary key,
   `MaMH` varchar(10) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `Khoa` smallint(5) NOT NULL DEFAULT '0',
   `MaCN` varchar(12) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `TuChon` bit(1) NOT NULL,
   `NhomTC` varchar(2) COLLATE utf8_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`MaMH`,`Khoa`,`MaCN`),
+  KEY `MaMH`(`MaMH`),
   KEY `Khoa` (`Khoa`),
   KEY `MaCN` (`MaCN`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -445,11 +460,12 @@ INSERT INTO `dbo_khungctdt` (`MaMH`, `Khoa`, `MaCN`, `TuChon`, `NhomTC`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `dbo_lopchuyennganh` (
+ `id_lopchuyennganh` int(5) auto_increment primary key,
   `MaLop` varchar(10) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `Khoa` smallint(5) DEFAULT NULL,
   `MaCN` varchar(12) COLLATE utf8_unicode_ci DEFAULT NULL,
   `TenLop` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`MaLop`),
+  KEY `MaLop` (`MaLop`),
   KEY `Khoa` (`Khoa`),
   KEY `MaCN` (`MaCN`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -577,6 +593,7 @@ INSERT INTO `dbo_lopchuyennganh` (`MaLop`, `Khoa`, `MaCN`, `TenLop`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `dbo_lophp` (
+ `id_lophp` int(5) auto_increment primary key,
   `MaNhom` varchar(10) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `MaGV` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
   `MaMH` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -589,7 +606,7 @@ CREATE TABLE IF NOT EXISTS `dbo_lophp` (
   `Phong` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `TuanGD` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `BiXoa` bit(1) NOT NULL,
-  PRIMARY KEY (`MaNhom`),
+  KEY `MaNhom` (`MaNhom`),
   KEY `MaGV` (`MaGV`),
   KEY `MaMH` (`MaMH`),
   KEY `NienKhoa` (`NienKhoa`),
@@ -603,6 +620,7 @@ CREATE TABLE IF NOT EXISTS `dbo_lophp` (
 --
 
 CREATE TABLE IF NOT EXISTS `dbo_monhoc` (
+ `id_monhoc` int(5) auto_increment primary key,
   `MaMH` varchar(10) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `MaKhoa` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
   `MaNhomHP` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -610,7 +628,7 @@ CREATE TABLE IF NOT EXISTS `dbo_monhoc` (
   `SoTC` smallint(5) DEFAULT NULL,
   `SoTietLT` smallint(5) DEFAULT NULL,
   `SoTietTH` smallint(5) DEFAULT NULL,
-  PRIMARY KEY (`MaMH`),
+  KEY `MaMH` (`MaMH`),
   KEY `MaKhoa` (`MaKhoa`),
   KEY `MaNhomHP` (`MaNhomHP`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -912,9 +930,10 @@ INSERT INTO `dbo_monhoc` (`MaMH`, `MaKhoa`, `MaNhomHP`, `TenMH`, `SoTC`, `SoTiet
 --
 
 CREATE TABLE IF NOT EXISTS `dbo_montienquyet` (
+ `id_monhoctienquyet` int(5) auto_increment primary key,
   `MaMH` varchar(10) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `MaMHTQ` varchar(10) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  PRIMARY KEY (`MaMH`,`MaMHTQ`),
+   KEY `MaMH` (`MaMH`),
   KEY `MaMHTQ` (`MaMHTQ`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -925,11 +944,12 @@ CREATE TABLE IF NOT EXISTS `dbo_montienquyet` (
 --
 
 CREATE TABLE IF NOT EXISTS `dbo_nganh` (
+ `id_nghanh` int(5) auto_increment primary key,
   `MaNganh` varchar(10) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `MaKhoa` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
   `TenNganh` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `SoNamDT` tinyint(3) unsigned DEFAULT NULL,
-  PRIMARY KEY (`MaNganh`),
+   KEY `MaNganh` (`MaNganh`),
   KEY `MaKhoa` (`MaKhoa`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -1013,10 +1033,11 @@ INSERT INTO `dbo_nganh` (`MaNganh`, `MaKhoa`, `TenNganh`, `SoNamDT`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `dbo_nhomhocphi` (
+ `id_nhomhocphi` int(5) auto_increment primary key,
   `MaNhomHP` varchar(10) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `TenNhomHP` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `MucHocPhi` double DEFAULT NULL,
-  PRIMARY KEY (`MaNhomHP`)
+  KEY `MaNhomHP` (`MaNhomHP`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -1034,9 +1055,10 @@ INSERT INTO `dbo_nhomhocphi` (`MaNhomHP`, `TenNhomHP`, `MucHocPhi`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `dbo_nienkhoa` (
+ `id_nienkhoa` int(5) auto_increment primary key,
   `NienKhoa` varchar(9) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `HocKy` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`NienKhoa`,`HocKy`),
+  KEY `NienKhoa` (`NienKhoa`),
   KEY `HocKy` (`HocKy`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -1059,6 +1081,7 @@ INSERT INTO `dbo_nienkhoa` (`NienKhoa`, `HocKy`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `dbo_sinhvien` (
+ `id_sv` int(5) auto_increment primary key,
   `MaSV` varchar(10) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `MaLop` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
   `Holot` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -1068,7 +1091,7 @@ CREATE TABLE IF NOT EXISTS `dbo_sinhvien` (
   `QueQuan` longtext COLLATE utf8_unicode_ci,
   `MatKhau` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
   `Email` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`MaSV`),
+  KEY `MaSV` (`MaSV`),
   KEY `MaLop` (`MaLop`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -4593,7 +4616,7 @@ INSERT INTO `dbo_sinhvien` (`MaSV`, `MaLop`, `Holot`, `Ten`, `NgaySinh`, `GioiTi
 --
 -- Constraints for dumped tables
 --
-
+UPDATE `qldt`.`dbo_khoa` SET `TenKhoa` = 'Khoa Công Nghệ thông tin' WHERE (`id_khoa` = '19');
 --
 -- Constraints for table `dbo_bcnkhoa`
 --
@@ -4692,3 +4715,19 @@ ALTER TABLE `dbo_sinhvien`
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+use qldt;
+INSERT INTO `qldt`.`dbo_nhomhocphi` (`MaNhomHP`, `TenNhomHP`, `MucHocPhi`) VALUES ('NHP003', 'Nhóm HP Công Nghệ', '300000');
+INSERT INTO `qldt`.`dbo_nhomhocphi` (`MaNhomHP`, `TenNhomHP`, `MucHocPhi`) VALUES ('NHP004', 'Nhóm HP Sư Phạm', '270000');
+INSERT INTO `qldt`.`dbo_nhomhocphi` (`MaNhomHP`, `TenNhomHP`, `MucHocPhi`) VALUES ('NHP005', 'Nhóm HP Xã Hội', '290000');
+
+insert into dbo_monhoc(MaMH,MaKhoa,MaNhomHP,TenMH,SoTC,SoTietLT,SoTietTH) values
+('INF30039','TECH','NHP003','Chương trình dịch',3,35,10),
+('INF30038','TECH', 'NHP003','Các giải thuật lập trình nâng cao',3,30,15),
+('INF30041','TECH', 'NHP003','Đánh giá độ phức tạp thuật toán',3,30,15),
+('INF30052','TECH', 'NHP003','Lý thuyết tối ưu',3,35,0),
+('INF30059','TECH', 'NHP003','Thương mại điện tử',3,30,15),
+('INF30060','TECH', 'NHP003','Xử lý ngôn ngữ tự nhiên',3,30,15),
+('INF30040','TECH', 'NHP003','Cơ sở dữ liệu nâng cao',3,35,10),
+('INF30043','TECH', 'NHP003','Hệ thống thông tin quản lí',3,35,0),
+('INF30045','TECH', 'NHP003','Khai phá dữ liệu',3,35,10),
+('INF30046','TECH', 'NHP003','Kiến trúc phần mềm',3,35,0);
