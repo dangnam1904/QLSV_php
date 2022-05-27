@@ -1,6 +1,7 @@
 <?php
 
 require "header.php";
+require_once "dbhelp.php";
 
 ?>
 
