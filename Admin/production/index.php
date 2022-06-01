@@ -1,8 +1,19 @@
 <?php
+    session_start();
+?>
+
+
+<?php
 
 require "header.php";
 require_once "dbhelp.php";
 
+if(isset($_SESSION['username'])){
+    
+}
+else{
+    exit();
+}
 ?>
 
 <body class="nav-md">
@@ -23,7 +34,7 @@ require_once "dbhelp.php";
                         </div>
                         <div class="profile_info">
                             <span>Welcome,</span>
-                            <h2>John Doe</h2>
+                            <h2><?php echo $_SESSION["username"]?></h2>
                         </div>
                     </div>
                     <!-- /menu profile quick info -->
@@ -93,7 +104,7 @@ require_once "dbhelp.php";
                         <a data-toggle="tooltip" data-placement="top" title="Lock">
                             <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
                         </a>
-                        <a data-toggle="tooltip" data-placement="top" title="Logout" href="login.html">
+                        <a data-toggle="tooltip" data-placement="top" title="Logout" href="logout.php">
                             <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
                         </a>
                     </div>
@@ -111,16 +122,16 @@ require_once "dbhelp.php";
                         <ul class=" navbar-right">
                             <li class="nav-item dropdown open" style="padding-left: 15px;">
                                 <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
-                                    <img src="images/img.jpg" alt="">John Doe
+                                    <img src="images/img.jpg" alt=""><?php echo $_SESSION['username']?>
                                 </a>
                                 <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="javascript:;"> Profile</a>
                                     <a class="dropdown-item" href="javascript:;">
-                                        <span class="badge bg-red pull-right">50%</span>
+                                        <span class="badge bg-red pull-right"></span>
                                         <span>Settings</span>
                                     </a>
                                     <a class="dropdown-item" href="javascript:;">Help</a>
-                                    <a class="dropdown-item" href="login.html"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
+                                    <a class="dropdown-item" href="logout.php"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
                                 </div>
                             </li>
 
@@ -156,12 +167,7 @@ require_once "dbhelp.php";
                 </div>
             </div>
             <!-- /top navigation -->
-
-           
-
-
         </div>
-
 
         <!--  laay toiw day  -->
         <div class="right_col" role="main">
@@ -494,7 +500,7 @@ require_once "dbhelp.php";
                                         <li><i class="fa fa-bar-chart"></i><a href="#">Auto Renewal</a> </li>
                                         <li><i class="fa fa-line-chart"></i><a href="#">Achievements</a>
                                         </li>
-                                        <li><i class="fa fa-area-chart"></i><a href="#">Logout</a>
+                                        <li><i class="fa fa-area-chart"></i><a href="logout.php">Logout</a>
                                         </li>
                                     </ul>
 

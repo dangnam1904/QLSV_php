@@ -1,4 +1,13 @@
-<?php require "header.php"; ?>
+<?php 
+
+?>
+<?php require "header.php"; 
+	if(isset($_SESSION["loggedin"])){
+	}
+	else{
+		exit();
+	}
+?>
 
 <div class="group-box">
 	<div align="center">

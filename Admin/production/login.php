@@ -1,5 +1,38 @@
+<?php
+    session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
+<?php 
+    
+    require_once('dbhelp.php');
+    
+
+    $username =$password='';
+    if (!empty($_POST)){
+       
+        if(isset($_POST['username'])){
+            $username= $_POST['username'];
+        }
+        if(isset($_POST['password'])){
+            $password= md5($_POST['password']);
+        }
+        $sql="select *from dbo_admin where tendn='".$username."' and matkhau='".$password."'";
+        $result= executeResult($sql);
+        if($result!=null && count($result)>0){
+            $admin=$result[0];
+            $_SESSION["username"]=$admin['TenDN'];
+           // echo $_SESSION['username'];
+            header("location: index.php");
+        }
+        else{
+            echo "<div class='error'><br><div align='center'>Tên đăng nhập và mật khẩu không hợp lệ. <br>";
+			echo " <a href='".$_SERVER["PHP_SELF"]."'> Thử lại </a> </div> </div><br>";
+            
+        }
+    }
+?>
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -23,6 +56,7 @@
     <link href="../build/css/custom.min.css" rel="stylesheet">
 </head>
 
+
 <body class="login">
     <div>
         <a class="hiddenanchor" id="signup"></a>
@@ -31,19 +65,19 @@
         <div class="login_wrapper">
             <div class="animate form login_form">
                 <section class="login_content">
-                    <form>
+                    <form action="<?php echo $_SERVER["PHP_SELF"];?>" method="POST">
                         <h1>Đăng nhập</h1>
                         <div>
-                            <input type="text" class="form-control" placeholder="Username" required="" />
+                            <input type="text" class="form-control" name="username" placeholder="Username" required="" />
                         </div>
                         <div>
-                            <input type="password" class="form-control" placeholder="Password" required="" />
+                            <input type="password" class="form-control" name="password" placeholder="Password" required="" />
                         </div>
                         <div>
-                            <a class="btn btn-default submit" href="index.html">Đăng nhập</a>
+                            <button class="btn btn-default submit" type="submit" >Đăng nhập</button>
                             <a class="reset_pass" href="#">Quên mật khẩu</a>
                         </div>
-
+                      
                         <div class="clearfix"></div>
 
 
@@ -54,6 +88,8 @@
 
         </div>
     </div>
+
+
 </body>
 
 </html>

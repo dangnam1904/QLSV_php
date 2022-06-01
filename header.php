@@ -61,12 +61,18 @@
 						<div class="group-box-content">
 							<ul>								
 								<li> <a href="khoa_vien.php"> Khoa - Viện</a> </li>
-								<li> <a href="giangvien.php">Giảng Viên</a> </li>
-								<li> <a href="sinhvien1.php">Sinh Viên</a> </li>
-								<li> <a href="nganhdaotao.php">Ngành Đào Tạo</a> </li>
-								<li> <a href="lopchuyennganh.php">Lớp Chuyên Ngành</a> </li>
-								<li> <a href="lophocphan.php">Lớp Học Phần</a> </li>
 								<li> <a href="monhoc.php">Môn Học</a> </li>
+								<li> <a href="nganhdaotao.php">Ngành Đào Tạo</a> </li>
+								<?php 
+								if(isset($_SESSION["loggedin"])){
+									echo '	<li> <a href="giangvien.php">Giảng Viên</a> </li>
+									<li> <a href="sinhvien1.php">Sinh Viên</a> </li>
+									
+									<li> <a href="lopchuyennganh.php">Lớp Chuyên Ngành</a> </li>
+									<li> <a href="lophocphan.php">Lớp Học Phần</a> </li>';
+								}
+							
+								?>
 							</ul>						
 						</div>						
 				</div>

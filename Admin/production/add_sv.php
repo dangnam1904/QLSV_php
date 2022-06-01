@@ -1,14 +1,103 @@
 <?php
-session_start();
+
 require "header.php";
 require_once "dbhelp.php";
-if(isset($_SESSION['username'])){
+$masv =$holot=$ten=$quequan=$gioitinh=$malop=$matkhau= $email=$id_sv= $ngaysinh='';
+if (!empty($_POST)){
+   
+    if(isset($_POST['masv'])){
+        $masv= $_POST['masv'];
+    }
+
+    if(isset($_POST['holot'])){
+        $holot= $_POST['holot'];
+    }
+
+    if(isset($_POST['ten'])){
+        $ten= $_POST['ten'];
+    }
+    if(isset($_POST['email'])){
+        $email= $_POST['email'];
+    }
+    if(isset($_POST['matkhau'])){
+        $matkhau= md5($_POST['matkhau']);
+    }
+    if(isset($_POST['gioitinh'])){
+        $gioitinh= $_POST['gioitinh'];
+    }
+    if(isset($_POST['lop'])){
+        $malop= $_POST['lop'];
+    }
+    if(isset($_POST['quequan'])){
+        $quequan= $_POST['quequan'];
+    }
+
+    if(isset($_POST['ngaysinh'])){
+        $ngaysinh= $_POST['ngaysinh'];
+    }
+    if(isset($_POST['id_sv'])){
+        $id_sv= $_POST['id_sv'];
+    }
+    
+    // Tránh lỗi sql injection //
+    $masv= str_replace('\'','\\\'',$masv);
+    $holot= str_replace('\'','\\\'',$holot);
+    $ten= str_replace('\'','\\\'',$ten);
+    $ngaysinh= str_replace('\'','\\\'',$ngaysinh);
+    $gioitinh= str_replace('\'','\\\'',$gioitinh);
+    $quequan= str_replace('\'','\\\'',$quequan);
+    $matkhau= str_replace('\'','\\\'',$matkhau);
+    $email= str_replace('\'','\\\'',$email);
+    $malop= str_replace('\'','\\\'',$malop);
+    $id_sv= str_replace('\'','\\\'',$id_sv);
+
+   
+   
+    if( $id_sv!=''){
+        // update
+        $sql="update dbo_sinhvien set HoLot= '$holot' ,Ten ='$ten', NgaySinh ='$ngaysinh',
+        Gioitinh='$gioitinh',quequan='$quequan', email='$email'
+         where  id_sv='$id_sv'";
+         execute($sql);
+    }
+    else{
+        // check khoa
+        $sql_check_Fk="select * from dbo_sinhvien where masv='".$masv."'";
+        $array_check= executeResult($sql_check_Fk);
+        if( $array_check!=null && count($array_check)<=0){
+            $sql= "insert into dbo_sinhvien(MaSV,Holot,Ten,Ngaysinh, gioitinh,Quequan,matkhau,email,malop) values
+            ('$masv','$holot','$ten','$ngaysinh','$gioitinh','$quequan','$matkhau','$email','$malop')";
+                 execute($sql);
+        }
+        
+    }
     
 }
-else{
-    exit();
+
+$id='';
+if(isset($_GET['id'])){
+    $id=$_GET['id'];
+    $sql="select *from dbo_sinhvien where id_sv='".$id."'";
+    $sv_list=executeResult($sql);
+    if( $sv_list!=null && count($sv_list)>0){
+        $sv=$sv_list[0];
+        $id_sv=$sv['id_sv'];
+        $masv= $sv['MaSV'];
+        $malop=$sv['MaLop'];
+        $holot=$sv['Holot'];
+        $ten=$sv['Ten'];
+        $ngaysinh=$sv['NgaySinh'];
+        $gioitinh=$sv['GioiTinh'];
+        $quequan=$sv['QueQuan'];
+        $matkhau=$sv['MatKhau'];
+        $email=$sv['Email'];
+
+    }
+    else{
+        $id='';
+    }
 }
-?>
+
 ?>
 
 <body class="nav-md">
@@ -29,7 +118,7 @@ else{
                         </div>
                         <div class="profile_info">
                             <span>Welcome,</span>
-                            <h2><?php echo $_SESSION["username"] ?></h2>
+                            <h2>John Doe</h2>
                         </div>
                     </div>
                     <!-- /menu profile quick info -->
@@ -99,7 +188,7 @@ else{
                         <a data-toggle="tooltip" data-placement="top" title="Lock">
                             <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
                         </a>
-                        <a data-toggle="tooltip" data-placement="top" title="Logout" href="logout.php">
+                        <a data-toggle="tooltip" data-placement="top" title="Logout" href="login.html">
                             <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
                         </a>
                     </div>
@@ -140,7 +229,7 @@ else{
                                         <a class="dropdown-item">
                                             <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
                                             <span>
-                          <span><?php echo $_SESSION['username']?></span>
+                          <span>John Smith</span>
                                             <span class="time">3 mins ago</span>
                                             </span>
                                             <span class="message">
@@ -166,143 +255,121 @@ else{
 
         <!-- code xử ly từ phần này-->
         <div class="right_col" role="main">
-                <div class="">
-                        <div style="width:auto">
-                            <div style="width:60%;float:left">
-                                <form action="<?php echo $_SERVER["PHP_SELF"];?>" method="post">
-                                    <label for ="class" style="font-size: 16px">Chọn lớp</label>
-                                    <select name="class" style="height:25px;font-size:14px" >
-                                        <?php 
-                                         $malop;
-                                         if(isset($_POST["class"])){
-                                             $malop=$_POST["class"];
-                                         } 
-                                         else{
-                                             $malop="";
-                                         }
-                                        $sql_class="select * from dbo_lopchuyennganh";
-                                        $list_class= executeResult($sql_class);
-                                        foreach( $list_class as $class){
-                                            echo '
-                                            <option value="'.$class['MaLop'].'"; style="font-size:14px" 
-                                            ';
-                                            if($class['MaLop']==$malop){
-                                                echo "selected";
-                                            }
-                                            echo '> '.$class['TenLop'].' </option>';
-                                        }
-                                        
-                                        ?>
-                                    
-                                    </select>
-                                    <button type="submit"> Hiển thị</button>
-                                </form>
-                            </div>
+        <div class="x_content">
+									<br />
+									<form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left" method="post">
+                                        <input name="id_sv" value=<?=$id_sv?> style="visibility:hidden" >
+										<div class="item form-group">
+											<label class="col-form-label col-md-3 col-sm-3 label-align" for="masv">Mã sinh viên <span class="required">*</span>
+											</label>
+											<div class="col-md-6 col-sm-6 ">
+												<input type="text" id="masv" value="<?=$masv?>" name="masv" required="required" class="form-control ">
+											</div>
+										</div>
+										<div class="item form-group">
+											<label class="col-form-label col-md-3 col-sm-3 label-align" for="Holot">Họ lót <span class="required">*</span>
+											</label>
+											<div class="col-md-6 col-sm-6 ">
+												<input type="text" id="holot" name="holot" value="<?=$holot?>" required="required" class="form-control">
+											</div>
+										</div>
 
-                            <div class="input-group" style="width:25%;float:right;" >
-                                <div class="form-outline">
-                                    <input id="search-input" type="search" id="form1" class="form-control" placeholder="Tìm theo mã sinh viên" />
-                                
-                                </div>
-                                <button id="search-button" type="button" class="btn btn-primary">
-                                    <i class="fa fa-search"></i>
-                                </button>
-                            </div>
+                                        <div class="item form-group">
+											<label class="col-form-label col-md-3 col-sm-3 label-align" for="Ten">Tên <span class="required">*</span>
+											</label>
+											<div class="col-md-6 col-sm-6 ">
+												<input type="text"  name="ten" value="<?=$ten?>" required="required" class="form-control">
+											</div>
+										</div>
 
-                        </div>
-                      
-                    
-                   
-                    <div class="clearfix"></div>
-                    <div>
-                           <button  onclick="window.open('add_sv.php','_seft')"> Thêm sinh viên</button>
-                       </div>
-                    <div class="row">
-                        <div class="col-md-12 col-sm-12 ">
-                            
-                            
-                                                <table id="" class="table table-striped table-bordered" style="width:100%">
-                                                    <thead>
-                                                        <tr>
-                                                            <th> STT</th>
-                                                            <th style="display:none">Id </th>
-                                                            <th>Mã sinh viên</th>
-                                                            <th>Tên sinh viên</th>
-                                                            <th>Ngày sinh  </th>
-                                                            <th>Quê quán</th>
-                                                            <th>Email</th>
-                                                            <th>Giới tính</th>
-                                                            <th> Chỉnh sửa</th>
-                                                        </tr>
-                                                    </thead>
+										<div class="item form-group">
+											<label for="quequan" class="col-form-label col-md-3 col-sm-3 label-align">Quê quán</label>
+											<div class="col-md-6 col-sm-6 ">
+												<input  class="form-control" value="<?=$quequan?>" type="text" name="quequan">
+											</div>
+										</div>
+										<div class="item form-group">
+											<label class="col-form-label col-md-3 col-sm-3 label-align">Giới tính</label>
+											<div class="col-md-6 col-sm-6 ">
+                                                <?php
+                                                if($gioitinh==1){
+                                                    echo '
 
-                                               
-                                                    <tbody>
-                                                    <?php
-                                                   
-                                                    $sql_sv="select * from dbo_sinhvien where malop= '".$malop."'";
-                                                    $id=1;
-                                                    $list_sv= executeResult($sql_sv);
-                                                    // if( empty($list_sv)){
-                                                    //     echo ' Không có sinh viên';
-                                                    // }
-                                                    foreach( $list_sv as $sv){
-                                                        $gioitinh;
-                                                        if( $sv['GioiTinh']==1 ){
-                                                                    $gioitinh="Nam";
-                                                        }
-                                                        else{
-                                                            $gioitinh="Nữ";
-                                                        }
+                                                    <input type="radio"  name="gioitinh" value="1" checked="checked" >
+                                                      <label for="nam">Nam</label>
+                                                      <input type="radio" name="gioitinh" value="0">
+                                                      <label for="Nữ">Nữ</label><br>
+                                                    ';
+                                                }
+                                                else{
+                                                    echo '   <input type="radio"  name="gioitinh" value="1"  >
+                                                      <label for="nam">Nam</label>
+                                                      <input type="radio" name="gioitinh" value="0" checked="checked">
+                                                      <label for="Nữ">Nữ</label><br>';
+
+                                                }
+                                                ?>
+                                             
+											</div>
+										</div>
+
+                                        <div class="item form-group">
+											<label for="matkhau" class="col-form-label col-md-3 col-sm-3 label-align">Mật khẩu</label>
+											<div class="col-md-6 col-sm-6 ">
+												<input  class="form-control" type="password" name="matkhau">
+											</div>
+										</div>
+
+                                        <div class="item form-group">
+											<label for="email" class="col-form-label col-md-3 col-sm-3 label-align">Email</label>
+											<div class="col-md-6 col-sm-6 ">
+												<input  class="form-control" value="<?=$email?>" type="text" name="email">
+											</div>
+										</div>
+
+                                        <div class="form-group row">
+											<label class="col-form-label col-md-3 col-sm-3 label-align">Lớp</label>
+											<div class="col-md-6 col-sm-6 ">
+												<select name="lop" class="form-control">
+
+                                                <?php 
+                                                    $sql_class="select * from dbo_lopchuyennganh";
+                                                    $list_class= executeResult($sql_class);
+                                                    foreach( $list_class as $class){
                                                         echo '
-                                                        <tr>
-                                                        <td>' .($id++). '</td>
-                                                        <td style="display:none">' .$sv['id_sv']. '</td>
-                                                        <td>' .$sv['MaSV']. '</td>
-                                                        <td>'.$sv['Holot'].' '. $sv['Ten'].'</td>
-                                                        
-                                                        <td>' .$sv['NgaySinh'].'</td>
-                                                        <td>' .$sv['QueQuan'].'</td>
-                                                        <td>' .$sv['Email'].'</td>
-                                                        <td>' .$gioitinh.'</td>
-                                                        <td> <button style="border-radius:4px;" onclick=\'window.open("add_sv.php?id='.$sv['id_sv'].'","_self")\'> <i class="fa fa-edit" style="color:#0066ff"></i> </button> &nbsp;&nbsp;
-                                                         <button style="border-radius:4px;"  onclick="deleteStudent('.$sv['id_sv'].')"><i class="fa fa-remove" style="color:#0066ff"></i> </button></td>
-                                                        <tr>';
-
+                                                        <option value="'.$class['MaLop'].'" style="font-size:14px"> '.$class['TenLop'].' </option>
+                                                        ';
                                                     }
                                                 ?>
-                                                        
-                                            
-                                                    </tbody>
-                                                </table>
-                                               
-                                            </div>
-                                        </div>
+												</select>
+											</div>
+										</div>
+										<div class="item form-group">
+											<label class="col-form-label col-md-3 col-sm-3 label-align">Ngày sinh <span class="required">*</span>
+											</label>
+											<div class="col-md-6 col-sm-6 ">
+												<input id="birthday" class="date-picker form-control"  value=<?=$ngaysinh?> name="ngaysinh"   placeholder="dd-mm-yyyy" type="text" required="required" type="text" onfocus="this.type='date'" onmouseover="this.type='date'" onclick="this.type='date'" onblur="this.type='text'" onmouseout="timeFunctionLong(this)">
+												<script>
+													function timeFunctionLong(input) {
+														setTimeout(function() {
+															input.type = 'text';
+														}, 60000);
+													}
+												</script>
+											</div>
+										</div>
 
-                                        <script type="text/javascript">
-                                                    function deleteStudent(id_sv){
-                                                        option = confirm("Ban muốn xóa sinh viên này không")
-                                                        if( !option){
-                                                            return;
-                                                        }
-                                                        
-                                                        $.post('delete_sv.php',{
-                                                            'id':id_sv
-                                                        },function(data){
-                                                            alert(data);
-                                                            location.reload()
-                                                        })
- 
-                                                    }
-                                        </script>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                        </div>
-                    </div>
-                </div>
-            </div>
+										<div class="ln_solid"></div>
+										<div class="item form-group">
+											<div class="col-md-6 col-sm-6 offset-md-3">
+												<button class="btn btn-primary" type="button" onclick="window.open('sinhvien.php','_parent')">Cancel</button>
+												<button class="btn btn-primary" type="reset">Reset</button>
+												<button type="submit" class="btn btn-success">Submit</button>
+											</div>
+										</div>
+
+									</form>
+								</div>
     </div>
     
 </body>
