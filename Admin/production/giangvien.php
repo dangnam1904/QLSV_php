@@ -1,7 +1,13 @@
 <?php
-session_start();
+    session_start();
+?>
+
+
+<?php
 require "header.php";
 require_once "dbhelp.php";
+
+
 if(isset($_SESSION['username'])){
     
 }
@@ -9,11 +15,10 @@ else{
     exit();
 }
 ?>
-?>
-
+<html>
 <body class="nav-md">
     <div class="container body">
-    <div class="main_container">
+        <div class="main_container">
             <div class="col-md-3 left_col">
                 <div class="left_col scroll-view">
                     <div class="navbar nav_title" style="border: 0;">
@@ -48,6 +53,7 @@ else{
                                     <ul class="nav child_menu">
                                         <li><a href="lopchuyen_nganh.php">Lớp chuyên ngành</a></li>
                                         <li><a href="lophocphan.php">Lớp học phần</a></li>
+                                        <li><a href="monhoc.php">Môn học</a></li>
                                     </ul>
                                 </li>
                                 <li><a><i class="fa fa-desktop"></i> Tin tức <span class="fa fa-chevron-down"></span></a>
@@ -153,32 +159,33 @@ else{
             <!-- /top navigation -->
         </div>
 
-        <!-- code xử ly từ phần này-->
+        <!-- Code ---->
+
         <div class="right_col" role="main">
                 <div class="">
                         <div style="width:auto">
                             <div style="width:60%;float:left">
                                 <form action="<?php echo $_SERVER["PHP_SELF"];?>" method="post">
-                                    <label for ="class" style="font-size: 16px">Chọn lớp</label>
-                                    <select name="class" style="height:25px;font-size:14px" >
+                                    <label for ="class" style="font-size: 16px">Hàm vị</label>
+                                    <select name="hoc_vi" style="height:25px;font-size:14px" >
                                         <?php 
-                                         $malop;
-                                         if(isset($_POST["class"])){
-                                             $malop=$_POST["class"];
+                                         $hoc_vi;
+                                         if(isset($_POST["hoc_vi"])){
+                                             $hoc_vi=$_POST["hoc_vi"];
                                          } 
                                          else{
-                                             $malop="";
+                                             $hoc_vi="";
                                          }
-                                        $sql_class="select * from dbo_lopchuyennganh order by MaCN";
-                                        $list_class= executeResult($sql_class);
-                                        foreach( $list_class as $class){
+                                        $sql_hoc_vi="select * from dbo_hocvi order by MaHV";
+                                        $list_HV= executeResult($sql_hoc_vi);
+                                        foreach( $list_HV as $hv){
                                             echo '
-                                            <option value="'.$class['MaLop'].'"; style="font-size:14px" 
+                                            <option value="'.$hv['MaHV'].'"; style="font-size:14px" 
                                             ';
-                                            if($class['MaLop']==$malop){
+                                            if($hv['MaHV']==$hoc_vi){
                                                 echo "selected";
                                             }
-                                            echo '> '.$class['TenLop'].' </option>';
+                                            echo '> '.$hv['TENHV'].' </option>';
                                         }
                                         
                                         ?>
@@ -190,7 +197,7 @@ else{
                             <form method="get">
                             <div class="input-group" style="width:25%;float:right;" >
                                 <div class="form-outline">
-                                    <input id="search-input" type="search" name="search" id="form1" class="form-control" placeholder="Tìm theo mã sinh viên" />
+                                    <input id="search-input" type="search" id="form1" name="search" class="form-control" placeholder="Tìm theo mã giảng viên" />
                                 
                                 </div>
                                 <button id="search-button" type="submit" class="btn btn-primary">
@@ -198,13 +205,14 @@ else{
                                 </button>
                             </div>
                             </form>
+
                         </div>
                       
                     
                    
                     <div class="clearfix"></div>
                     <div>
-                           <button  onclick="window.open('add_sv.php','_seft')"> Thêm sinh viên</button>
+                           <button  onclick="window.open('add_giangvien.php','_seft')"> Thêm giảng viên</button>
                        </div>
                     <div class="row">
                         <div class="col-md-12 col-sm-12 ">
@@ -215,8 +223,8 @@ else{
                                                         <tr>
                                                             <th> STT</th>
                                                             <th style="display:none">Id </th>
-                                                            <th>Mã sinh viên</th>
-                                                            <th>Tên sinh viên</th>
+                                                            <th>Mã giảng viên</th>
+                                                            <th>Tên giảng viên</th>
                                                             <th>Ngày sinh  </th>
                                                             <th>Quê quán</th>
                                                             <th>Email</th>
@@ -228,22 +236,23 @@ else{
                                                
                                                     <tbody>
                                                     <?php
-                                                    $sql_sv='';
-                                                    if( isset( $_GET['search']) && $_GET['search']!='' ){
-                                                      $key_seach= $_GET['search'];
-                                                      $sql_sv="select * from dbo_sinhvien where MaSV like '%".$key_seach."%' ";
-                                                    }
-                                                    else{
-                                                    $sql_sv="select * from dbo_sinhvien where malop= '".$malop."'";
-                                                    }
+                                                    $sql_gv='';
+                                                   if( isset( $_GET['search']) && $_GET['search']!='' ){
+                                                     $key_seach= $_GET['search'];
+                                                     $sql_gv="select * from dbo_giangvien where MaGV like '%".$key_seach."%' ";
+                                                   }
+                                                   else{
+                                                    $sql_gv="select * from dbo_giangvien where mahv= '".$hoc_vi."'";
+                                                   }
+                                                    
                                                     $id=1;
-                                                    $list_sv= executeResult($sql_sv);
+                                                    $list_gv= executeResult($sql_gv);
                                                     // if( empty($list_sv)){
-                                                    //     echo ' Không có sinh viên';
+                                                    //     echo ' Không có giảng viên';
                                                     // }
-                                                    foreach( $list_sv as $sv){
+                                                    foreach( $list_gv as $gv){
                                                         $gioitinh;
-                                                        if( $sv['GioiTinh']==1 ){
+                                                        if( $gv['GioiTinh']==1 ){
                                                                     $gioitinh="Nam";
                                                         }
                                                         else{
@@ -252,16 +261,16 @@ else{
                                                         echo '
                                                         <tr>
                                                         <td>' .($id++). '</td>
-                                                        <td style="display:none">' .$sv['id_sv']. '</td>
-                                                        <td>' .$sv['MaSV']. '</td>
-                                                        <td>'.$sv['Holot'].' '. $sv['Ten'].'</td>
+                                                        <td style="display:none">' .$gv['id_GV']. '</td>
+                                                        <td>' .$gv['MaGV']. '</td>
+                                                        <td>'.$gv['HoLot'].' '. $gv['Ten'].'</td>
                                                         
-                                                        <td>' .$sv['NgaySinh'].'</td>
-                                                        <td>' .$sv['QueQuan'].'</td>
-                                                        <td>' .$sv['Email'].'</td>
+                                                        <td>' .$gv['NgaySinh'].'</td>
+                                                        <td>' .$gv['QueQuan'].'</td>
+                                                        <td>' .$gv['Email'].'</td>
                                                         <td>' .$gioitinh.'</td>
-                                                        <td> <button style="border-radius:4px;" onclick=\'window.open("add_sv.php?id='.$sv['id_sv'].'","_self")\'> <i class="fa fa-edit" style="color:#0066ff"></i> </button> &nbsp;&nbsp;
-                                                         <button style="border-radius:4px;"  onclick="deleteStudent('.$sv['id_sv'].')"><i class="fa fa-remove" style="color:#0066ff"></i> </button></td>
+                                                        <td> <button style="border-radius:4px;" onclick=\'window.open("add_giangvien.php?id='.$gv['id_GV'].'","_self")\'> <i class="fa fa-edit" style="color:#0066ff"></i> </button> &nbsp;&nbsp;
+                                                         <button style="border-radius:4px;"  onclick="deleteTeacher('.$gv['id_GV'].')"><i class="fa fa-remove" style="color:#0066ff"></i> </button></td>
                                                         <tr>';
 
                                                     }
@@ -275,14 +284,14 @@ else{
                                         </div>
 
                                         <script type="text/javascript">
-                                                    function deleteStudent(id_sv){
-                                                        option = confirm("Ban muốn xóa sinh viên này không")
+                                                    function deleteTeacher(id_gv){
+                                                        option = confirm("Ban muốn xóa giảng viên  này không")
                                                         if( !option){
                                                             return;
                                                         }
                                                         
-                                                        $.post('delete_sv.php',{
-                                                            'id':id_sv
+                                                        $.post('delete_gv.php',{
+                                                            'id':id_gv
                                                         },function(data){
                                                             alert(data);
                                                             location.reload()
@@ -300,9 +309,11 @@ else{
             </div>
             
         </div>
-</body>
 
+    
+</body>
 </html>
 <?php 
  require "footer.php";
 ?>
+

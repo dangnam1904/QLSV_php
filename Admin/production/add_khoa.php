@@ -16,25 +16,20 @@ else{
 
 require "header.php";
 require_once "dbhelp.php";
-$masv =$holot=$ten=$quequan=$gioitinh=$malop=$matkhau= $email=$id_sv= $ngaysinh='';
+$makhoa =$tenkhoa=$ngayTL=$id_khoa='';
 
 $id=''; 
 if(isset($_GET['id'])){
     $id=$_GET['id'];
-    $sql="select *from dbo_sinhvien where id_sv='".$id."'";
-    $sv_list=executeResult($sql);
-    if( $sv_list!=null && count($sv_list)>0){
-        $sv=$sv_list[0];
-        $id_sv=$sv['id_sv'];
-        $masv= $sv['MaSV'];
-        $malop=$sv['MaLop'];
-        $holot=$sv['Holot'];
-        $ten=$sv['Ten'];
-        $ngaysinh=$sv['NgaySinh'];
-        $gioitinh=$sv['GioiTinh'];
-        $quequan=$sv['QueQuan'];
-        $matkhau=$sv['MatKhau'];
-        $email=$sv['Email'];
+    $sql="select *from dbo_khoa where makhoa='".$id."'";
+    $khoa_list=executeResult($sql);
+    if( $khoa_list!=null && count($khoa_list)>0){
+        $k=$khoa_list[0];
+        $id_khoa=$k['id_khoa'];
+        $makhoa= $k['MaKhoa'];
+        $tenkhoa=$k['TenKhoa'];
+        $ngayTL=$k['NgayTL'];
+       
 
     }
     else{
@@ -42,94 +37,63 @@ if(isset($_GET['id'])){
     }
 }
 
-
-
 if (!empty($_POST)){
    
-    if(isset($_POST['masv'])){
-        $masv= $_POST['masv'];
+    if(isset($_POST['makhoa'])){
+        $makhoa= $_POST['makhoa'];
     }
-
-    if(isset($_POST['holot'])){
-        $holot= $_POST['holot'];
+   
+    if(isset($_POST['tenkhoa'])){
+        $tenkhoa= $_POST['tenkhoa'];
     }
-
-    if(isset($_POST['ten'])){
-        $ten= $_POST['ten'];
+  
+    if(isset($_POST['ngayTL'])){
+        $ngayTL= $_POST['ngayTL'];
     }
-    if(isset($_POST['email'])){
-        $email= $_POST['email'];
+   
+       if(isset($_POST['id_khoa'])){
+        $id_khoa= $_POST['id_khoa'];
     }
-    if(isset($_POST['matkhau'])){
-        $matkhau= md5($_POST['matkhau']);
-    }
-    if(isset($_POST['gioitinh'])){
-        $gioitinh= $_POST['gioitinh'];
-    }
-    if(isset($_POST['lop'])){
-        $malop= $_POST['lop'];
-    }
-    if(isset($_POST['quequan'])){
-        $quequan= $_POST['quequan'];
-    }
-
-    if(isset($_POST['ngaysinh'])){
-        $ngaysinh= $_POST['ngaysinh'];
-    }
-    if(isset($_POST['id_sv'])){
-        $id_sv= $_POST['id_sv'];
-    }
+   
     
     // Tránh lỗi sql injection //
-    $masv= str_replace('\'','\\\'',$masv);
-    $holot= str_replace('\'','\\\'',$holot);
-    $ten= str_replace('\'','\\\'',$ten);
-    $ngaysinh= str_replace('\'','\\\'',$ngaysinh);
-    $gioitinh= str_replace('\'','\\\'',$gioitinh);
-    $quequan= str_replace('\'','\\\'',$quequan);
-    $matkhau= str_replace('\'','\\\'',$matkhau);
-    $email= str_replace('\'','\\\'',$email);
-    $malop= str_replace('\'','\\\'',$malop);
-    $id_sv= str_replace('\'','\\\'',$id_sv);
-
-   
-   
+    $id_khoa= str_replace('\'','\\\'',$id_khoa);
+    $makhoa= str_replace('\'','\\\'',$makhoa);
+    $tenkhoa= str_replace('\'','\\\'',$tenkhoa);
+    $ngayTL= str_replace('\'','\\\'',$ngayTL);
+  
     if( $id!=''){
-        // update
-        $sql="update dbo_sinhvien set HoLot= '$holot' ,Ten ='$ten', NgaySinh ='$ngaysinh',
-        Gioitinh='$gioitinh',quequan='$quequan', email='$email'
-         where  id_sv='$id_sv'";
+        // update 
+
+        $sql="update dbo_khoa set TenKhoa= '$tenkhoa' , NgayTL ='$ngayTL' where  makhoa='$makhoa'";
          execute($sql);
-        echo '<script>
-        alert("Thêm sinh viên thành công");
-        </script>';
-         header('Location: sinhvien.php');
+         echo '<script>
+         alert("Sửa thông tin thành công");
+         </script>';
     }
     else{
         // check khoa
-        $sql_check_Fk="select * from dbo_sinhvien where masv='".$masv."'";
+        $sql_check_Fk="select * from dbo_khoa where MaKhoa='".$makhoa."'";
         $array_check= executeResult($sql_check_Fk);
-       
+         
         if(count($array_check)<=0){
-            $sql= "insert into dbo_sinhvien(MaSV,Holot,Ten,Ngaysinh, gioitinh,Quequan,matkhau,email,malop) values
-            ('$masv','$holot','$ten','$ngaysinh','$gioitinh','$quequan','$matkhau','$email','$malop')";
-            execute($sql);
-            echo '<script>
-            alert("Thêm sinh viên thành công");
+            //insert 
+        $sql= "insert into dbo_khoa(MaKhoa,TenKhoa,NgayTL) values
+        ('$makhoa','$tenkhoa','$ngayTL')";
+        execute($sql);
+        echo '<script>
+            alert("Thêm khoa thành công");
             </script>';
         }
-        else{
+        else
+        {
             echo '<script>
-        alert("Sinh viên này đã tồn tại");
-        </script>';
-        }
-        
+            alert(" Khoa này đã tồn tại");
+            </script>';
+        }   
     }
-
-   
-    
+     
 }
-
 
 ?>
 
@@ -278,103 +242,30 @@ if (!empty($_POST)){
         <!-- code xử ly từ phần này-->
         <div class="right_col" role="main">
         <div class="x_content">
-									<br />
+        <br />
+        
 									<form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left" method="post">
-                                        <input name="id_sv" style="display:none" value="<?=$id_sv?>">
+                                        <input name="id_khoa" style="display:none" value="<?=$id_khoa?>">
 										<div class="item form-group">
-											<label class="col-form-label col-md-3 col-sm-3 label-align" for="masv">Mã sinh viên <span class="required">*</span>
+											<label class="col-form-label col-md-3 col-sm-3 label-align" for="magv">Mã khoa <span class="required">*</span>
 											</label>
 											<div class="col-md-6 col-sm-6 ">
-												<input type="text" id="masv" value="<?=$masv?>" name="masv" required="required" class="form-control ">
+												<input type="text" id="magv" value="<?=$makhoa?>" name="makhoa" required="required" class="form-control ">
 											</div>
 										</div>
 										<div class="item form-group">
-											<label class="col-form-label col-md-3 col-sm-3 label-align" for="Holot">Họ lót <span class="required">*</span>
+											<label class="col-form-label col-md-3 col-sm-3 label-align" for="TenKhoa">Tên Khoa <span class="required">*</span>
 											</label>
 											<div class="col-md-6 col-sm-6 ">
-												<input type="text" id="holot" name="holot" value="<?=$holot?>" required="required" class="form-control">
+												<input type="text" id="holot" name="tenkhoa" value="<?=$tenkhoa?>" required="required" class="form-control">
 											</div>
 										</div>
 
-                                        <div class="item form-group">
-											<label class="col-form-label col-md-3 col-sm-3 label-align" for="Ten">Tên <span class="required">*</span>
+										<div class="item form-group">
+											<label class="col-form-label col-md-3 col-sm-3 label-align">Ngày thành lập<span class="required">*</span>
 											</label>
 											<div class="col-md-6 col-sm-6 ">
-												<input type="text"  name="ten" value="<?=$ten?>" required="required" class="form-control">
-											</div>
-										</div>
-
-										<div class="item form-group">
-											<label for="quequan" class="col-form-label col-md-3 col-sm-3 label-align">Quê quán</label>
-											<div class="col-md-6 col-sm-6 ">
-												<input  class="form-control" value="<?=$quequan?>" type="text" name="quequan">
-											</div>
-										</div>
-										<div class="item form-group">
-											<label class="col-form-label col-md-3 col-sm-3 label-align">Giới tính</label>
-											<div class="col-md-6 col-sm-6 ">
-                                                <?php
-                                                if($gioitinh==1){
-                                                    echo '
-
-                                                    <input type="radio"  name="gioitinh" value="1" checked="checked" >
-                                                      <label for="nam">Nam</label>
-                                                      <input type="radio" name="gioitinh" value="0">
-                                                      <label for="Nữ">Nữ</label><br>
-                                                    ';
-                                                }
-                                                else{
-                                                    echo '   <input type="radio"  name="gioitinh" value="1"  >
-                                                      <label for="nam">Nam</label>
-                                                      <input type="radio" name="gioitinh" value="0" checked="checked">
-                                                      <label for="Nữ">Nữ</label><br>';
-
-                                                }
-                                                ?>
-                                             
-											</div>
-										</div>
-
-                                        <div class="item form-group">
-											<label for="matkhau" class="col-form-label col-md-3 col-sm-3 label-align">Mật khẩu</label>
-											<div class="col-md-6 col-sm-6 ">
-												<input  class="form-control" type="password" name="matkhau">
-											</div>
-										</div>
-
-                                        <div class="item form-group">
-											<label for="email" class="col-form-label col-md-3 col-sm-3 label-align">Email</label>
-											<div class="col-md-6 col-sm-6 ">
-												<input  class="form-control" value="<?=$email?>" type="text" name="email">
-											</div>
-										</div>
-
-                                        <div class="form-group row">
-											<label class="col-form-label col-md-3 col-sm-3 label-align">Lớp</label>
-											<div class="col-md-6 col-sm-6 ">
-												<select name="lop" class="form-control">
-
-                                                <?php 
-                                                    $sql_class="select * from dbo_lopchuyennganh order by MaCN";
-                                                    $list_class= executeResult($sql_class);
-                                                    foreach( $list_class as $class){
-                                                        echo '
-                                                        <option value="'.$class['MaLop'].'"; style="font-size:14px" 
-                                                        ';
-                                                        if($class['MaLop']==$malop){
-                                                            echo "selected";
-                                                        }
-                                                        echo '> '.$class['TenLop'].' </option>';
-                                                    }
-                                                ?>
-												</select>
-											</div>
-										</div>
-										<div class="item form-group">
-											<label class="col-form-label col-md-3 col-sm-3 label-align">Ngày sinh <span class="required">*</span>
-											</label>
-											<div class="col-md-6 col-sm-6 ">
-												<input id="birthday" class="date-picker form-control"  value=<?=$ngaysinh?> name="ngaysinh"   placeholder="dd-mm-yyyy" type="text" required="required" type="text" onfocus="this.type='date'" onmouseover="this.type='date'" onclick="this.type='date'" onblur="this.type='text'" onmouseout="timeFunctionLong(this)">
+												<input id="birthday" class="date-picker form-control"  value="<?=$ngayTL?>" name="ngayTL"   placeholder="dd-mm-yyyy" type="text" required="required" type="text" onfocus="this.type='date'" onmouseover="this.type='date'" onclick="this.type='date'" onblur="this.type='text'" onmouseout="timeFunctionLong(this)">
 												<script>
 													function timeFunctionLong(input) {
 														setTimeout(function() {
@@ -388,7 +279,7 @@ if (!empty($_POST)){
 										<div class="ln_solid"></div>
 										<div class="item form-group">
 											<div class="col-md-6 col-sm-6 offset-md-3">
-												<button class="btn btn-primary" type="button" onclick="window.open('sinhvien.php','_parent')">Cancel</button>
+												<button class="btn btn-primary" type="button" onclick="window.open('khoavien.php','_parent')">Cancel</button>
 												<button class="btn btn-primary" type="reset">Reset</button>
 												<button type="submit" class="btn btn-success">Submit</button>
 											</div>
@@ -396,6 +287,7 @@ if (!empty($_POST)){
 
 									</form>
 								</div>
+        </div>
     </div>
     
 </body>

@@ -16,25 +16,25 @@ else{
 
 require "header.php";
 require_once "dbhelp.php";
-$masv =$holot=$ten=$quequan=$gioitinh=$malop=$matkhau= $email=$id_sv= $ngaysinh='';
+$magv =$holot=$ten=$quequan=$gioitinh=$mahocvi=$matkhau= $email=$id_gv= $ngaysinh='';
 
 $id=''; 
 if(isset($_GET['id'])){
     $id=$_GET['id'];
-    $sql="select *from dbo_sinhvien where id_sv='".$id."'";
-    $sv_list=executeResult($sql);
-    if( $sv_list!=null && count($sv_list)>0){
-        $sv=$sv_list[0];
-        $id_sv=$sv['id_sv'];
-        $masv= $sv['MaSV'];
-        $malop=$sv['MaLop'];
-        $holot=$sv['Holot'];
-        $ten=$sv['Ten'];
-        $ngaysinh=$sv['NgaySinh'];
-        $gioitinh=$sv['GioiTinh'];
-        $quequan=$sv['QueQuan'];
-        $matkhau=$sv['MatKhau'];
-        $email=$sv['Email'];
+    $sql="select *from dbo_giangvien where id_GV='".$id."'";
+    $gv_list=executeResult($sql);
+    if( $gv_list!=null && count($gv_list)>0){
+        $gv=$gv_list[0];
+        $id_gv=$gv['id_GV'];
+        $magv= $gv['MaGV'];
+        $mahocvi=$gv['MaHV'];
+        $holot=$gv['HoLot'];
+        $ten=$gv['Ten'];
+        $ngaysinh=$gv['NgaySinh'];
+        $gioitinh=$gv['GioiTinh'];
+        $quequan=$gv['QueQuan'];
+        $matkhau=$gv['MatKhau'];
+        $email=$gv['Email'];
 
     }
     else{
@@ -42,46 +42,51 @@ if(isset($_GET['id'])){
     }
 }
 
-
-
 if (!empty($_POST)){
    
-    if(isset($_POST['masv'])){
-        $masv= $_POST['masv'];
+    if(isset($_POST['magv'])){
+        $magv= $_POST['magv'];
     }
-
+   
     if(isset($_POST['holot'])){
         $holot= $_POST['holot'];
     }
-
+  
     if(isset($_POST['ten'])){
         $ten= $_POST['ten'];
     }
+   
     if(isset($_POST['email'])){
         $email= $_POST['email'];
     }
+   
     if(isset($_POST['matkhau'])){
         $matkhau= md5($_POST['matkhau']);
     }
+ 
     if(isset($_POST['gioitinh'])){
         $gioitinh= $_POST['gioitinh'];
     }
-    if(isset($_POST['lop'])){
-        $malop= $_POST['lop'];
+   
+    if(isset($_POST['hoc_vi'])){
+        $mahocvi= $_POST['hoc_vi'];
     }
+   
     if(isset($_POST['quequan'])){
         $quequan= $_POST['quequan'];
     }
-
+    
     if(isset($_POST['ngaysinh'])){
         $ngaysinh= $_POST['ngaysinh'];
     }
-    if(isset($_POST['id_sv'])){
-        $id_sv= $_POST['id_sv'];
+   
+    if(isset($_POST['id_gv'])){
+        $id_gv= $_POST['id_gv'];
     }
+   
     
     // Tránh lỗi sql injection //
-    $masv= str_replace('\'','\\\'',$masv);
+    $magv= str_replace('\'','\\\'',$magv);
     $holot= str_replace('\'','\\\'',$holot);
     $ten= str_replace('\'','\\\'',$ten);
     $ngaysinh= str_replace('\'','\\\'',$ngaysinh);
@@ -89,47 +94,42 @@ if (!empty($_POST)){
     $quequan= str_replace('\'','\\\'',$quequan);
     $matkhau= str_replace('\'','\\\'',$matkhau);
     $email= str_replace('\'','\\\'',$email);
-    $malop= str_replace('\'','\\\'',$malop);
-    $id_sv= str_replace('\'','\\\'',$id_sv);
-
-   
-   
+    $mahocvi= str_replace('\'','\\\'',$mahocvi);
+    $id_gv= str_replace('\'','\\\'',$id_gv);
     if( $id!=''){
-        // update
-        $sql="update dbo_sinhvien set HoLot= '$holot' ,Ten ='$ten', NgaySinh ='$ngaysinh',
+        // update 
+
+        $sql="update dbo_giangvien set HoLot= '$holot' ,Ten ='$ten', NgaySinh ='$ngaysinh',
         Gioitinh='$gioitinh',quequan='$quequan', email='$email'
-         where  id_sv='$id_sv'";
+         where  id_GV='$id_gv'";
          execute($sql);
-        echo '<script>
-        alert("Thêm sinh viên thành công");
-        </script>';
-         header('Location: sinhvien.php');
+         echo '<script>
+         alert("Sửa thông tin thành công");
+         </script>';
     }
     else{
         // check khoa
-        $sql_check_Fk="select * from dbo_sinhvien where masv='".$masv."'";
+        $sql_check_Fk="select * from dbo_giangvien where magv='".$magv."'";
         $array_check= executeResult($sql_check_Fk);
-       
+         
         if(count($array_check)<=0){
-            $sql= "insert into dbo_sinhvien(MaSV,Holot,Ten,Ngaysinh, gioitinh,Quequan,matkhau,email,malop) values
-            ('$masv','$holot','$ten','$ngaysinh','$gioitinh','$quequan','$matkhau','$email','$malop')";
-            execute($sql);
-            echo '<script>
-            alert("Thêm sinh viên thành công");
+            //insert 
+        $sql= "insert into dbo_giangvien(Magv,Holot,Ten,Ngaysinh, gioitinh,Quequan,matkhau,email,mahv) values
+        ('$magv','$holot','$ten','$ngaysinh','$gioitinh','$quequan','$matkhau','$email','$mahocvi')";
+        execute($sql);
+        echo '<script>
+            alert("Thêm giảng viên thành công");
             </script>';
         }
-        else{
+        else
+        {
             echo '<script>
-        alert("Sinh viên này đã tồn tại");
-        </script>';
-        }
-        
+            alert("Mã giảng viên đã tồn tại");
+            </script>';
+        }   
     }
-
-   
-    
+     
 }
-
 
 ?>
 
@@ -278,14 +278,15 @@ if (!empty($_POST)){
         <!-- code xử ly từ phần này-->
         <div class="right_col" role="main">
         <div class="x_content">
-									<br />
+        <br />
+        
 									<form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left" method="post">
-                                        <input name="id_sv" style="display:none" value="<?=$id_sv?>">
+                                        <input name="id_gv" style="display:none" value="<?=$id_gv?>">
 										<div class="item form-group">
-											<label class="col-form-label col-md-3 col-sm-3 label-align" for="masv">Mã sinh viên <span class="required">*</span>
+											<label class="col-form-label col-md-3 col-sm-3 label-align" for="magv">Mã giảng viên <span class="required">*</span>
 											</label>
 											<div class="col-md-6 col-sm-6 ">
-												<input type="text" id="masv" value="<?=$masv?>" name="masv" required="required" class="form-control ">
+												<input type="text" id="magv" value="<?=$magv?>" name="magv" required="required" class="form-control ">
 											</div>
 										</div>
 										<div class="item form-group">
@@ -350,31 +351,39 @@ if (!empty($_POST)){
 										</div>
 
                                         <div class="form-group row">
-											<label class="col-form-label col-md-3 col-sm-3 label-align">Lớp</label>
+											<label class="col-form-label col-md-3 col-sm-3 label-align">Học vị</label>
 											<div class="col-md-6 col-sm-6 ">
-												<select name="lop" class="form-control">
-
+                                            <select name="hoc_vi" style="height:25px;font-size:14px" >
                                                 <?php 
-                                                    $sql_class="select * from dbo_lopchuyennganh order by MaCN";
-                                                    $list_class= executeResult($sql_class);
-                                                    foreach( $list_class as $class){
-                                                        echo '
-                                                        <option value="'.$class['MaLop'].'"; style="font-size:14px" 
-                                                        ';
-                                                        if($class['MaLop']==$malop){
-                                                            echo "selected";
-                                                        }
-                                                        echo '> '.$class['TenLop'].' </option>';
+                                                $hoc_vi;
+                                                if(isset($_POST["hoc_vi"])){
+                                                    $hoc_vi=$_POST["hoc_vi"];
+                                                } 
+                                                else{
+                                                    $hoc_vi="";
+                                                }
+                                                $sql_hoc_vi="select * from dbo_hocvi order by MaHV";
+                                                $list_HV= executeResult($sql_hoc_vi);
+                                                foreach( $list_HV as $hv){
+                                                    echo '
+                                                    <option value="'.$hv['MaHV'].'"; style="font-size:14px" 
+                                                    ';
+                                                    if($hv['MaHV']==$hoc_vi){
+                                                        echo "selected";
                                                     }
+                                                    echo '> '.$hv['TENHV'].' </option>';
+                                                }
+                                                
                                                 ?>
-												</select>
+                                    
+                                            </select>
 											</div>
 										</div>
 										<div class="item form-group">
 											<label class="col-form-label col-md-3 col-sm-3 label-align">Ngày sinh <span class="required">*</span>
 											</label>
 											<div class="col-md-6 col-sm-6 ">
-												<input id="birthday" class="date-picker form-control"  value=<?=$ngaysinh?> name="ngaysinh"   placeholder="dd-mm-yyyy" type="text" required="required" type="text" onfocus="this.type='date'" onmouseover="this.type='date'" onclick="this.type='date'" onblur="this.type='text'" onmouseout="timeFunctionLong(this)">
+												<input id="birthday" class="date-picker form-control"  value="<?=$ngaysinh?>" name="ngaysinh"   placeholder="dd-mm-yyyy" type="text" required="required" type="text" onfocus="this.type='date'" onmouseover="this.type='date'" onclick="this.type='date'" onblur="this.type='text'" onmouseout="timeFunctionLong(this)">
 												<script>
 													function timeFunctionLong(input) {
 														setTimeout(function() {
@@ -388,7 +397,7 @@ if (!empty($_POST)){
 										<div class="ln_solid"></div>
 										<div class="item form-group">
 											<div class="col-md-6 col-sm-6 offset-md-3">
-												<button class="btn btn-primary" type="button" onclick="window.open('sinhvien.php','_parent')">Cancel</button>
+												<button class="btn btn-primary" type="button" onclick="window.open('giangvien.php','_parent')">Cancel</button>
 												<button class="btn btn-primary" type="reset">Reset</button>
 												<button type="submit" class="btn btn-success">Submit</button>
 											</div>
@@ -396,6 +405,7 @@ if (!empty($_POST)){
 
 									</form>
 								</div>
+        </div>
     </div>
     
 </body>

@@ -1,7 +1,12 @@
 <?php
-session_start();
+    session_start();
+?>
+
+
+<?php
 require "header.php";
 require_once "dbhelp.php";
+
 if(isset($_SESSION['username'])){
     
 }
@@ -9,11 +14,10 @@ else{
     exit();
 }
 ?>
-?>
 
 <body class="nav-md">
     <div class="container body">
-    <div class="main_container">
+        <div class="main_container">
             <div class="col-md-3 left_col">
                 <div class="left_col scroll-view">
                     <div class="navbar nav_title" style="border: 0;">
@@ -48,6 +52,7 @@ else{
                                     <ul class="nav child_menu">
                                         <li><a href="lopchuyen_nganh.php">Lớp chuyên ngành</a></li>
                                         <li><a href="lophocphan.php">Lớp học phần</a></li>
+                                        <li><a href="monhoc.php">Môn học</a></li>
                                     </ul>
                                 </li>
                                 <li><a><i class="fa fa-desktop"></i> Tin tức <span class="fa fa-chevron-down"></span></a>
@@ -153,44 +158,18 @@ else{
             <!-- /top navigation -->
         </div>
 
-        <!-- code xử ly từ phần này-->
         <div class="right_col" role="main">
                 <div class="">
                         <div style="width:auto">
                             <div style="width:60%;float:left">
-                                <form action="<?php echo $_SERVER["PHP_SELF"];?>" method="post">
-                                    <label for ="class" style="font-size: 16px">Chọn lớp</label>
-                                    <select name="class" style="height:25px;font-size:14px" >
-                                        <?php 
-                                         $malop;
-                                         if(isset($_POST["class"])){
-                                             $malop=$_POST["class"];
-                                         } 
-                                         else{
-                                             $malop="";
-                                         }
-                                        $sql_class="select * from dbo_lopchuyennganh order by MaCN";
-                                        $list_class= executeResult($sql_class);
-                                        foreach( $list_class as $class){
-                                            echo '
-                                            <option value="'.$class['MaLop'].'"; style="font-size:14px" 
-                                            ';
-                                            if($class['MaLop']==$malop){
-                                                echo "selected";
-                                            }
-                                            echo '> '.$class['TenLop'].' </option>';
-                                        }
-                                        
-                                        ?>
-                                    
-                                    </select>
-                                    <button type="submit"> Hiển thị</button>
-                                </form>
+                            <div>
+                           <button  onclick="window.open('add_khoa.php','_seft')"> Thêm khoa</button>
+                           </div>
                             </div>
                             <form method="get">
                             <div class="input-group" style="width:25%;float:right;" >
                                 <div class="form-outline">
-                                    <input id="search-input" type="search" name="search" id="form1" class="form-control" placeholder="Tìm theo mã sinh viên" />
+                                    <input id="search-input" type="search" id="form1" name="search" class="form-control" placeholder="Tìm theo tên" />
                                 
                                 </div>
                                 <button id="search-button" type="submit" class="btn btn-primary">
@@ -198,14 +177,13 @@ else{
                                 </button>
                             </div>
                             </form>
+
                         </div>
                       
                     
                    
                     <div class="clearfix"></div>
-                    <div>
-                           <button  onclick="window.open('add_sv.php','_seft')"> Thêm sinh viên</button>
-                       </div>
+                    
                     <div class="row">
                         <div class="col-md-12 col-sm-12 ">
                             
@@ -215,12 +193,9 @@ else{
                                                         <tr>
                                                             <th> STT</th>
                                                             <th style="display:none">Id </th>
-                                                            <th>Mã sinh viên</th>
-                                                            <th>Tên sinh viên</th>
-                                                            <th>Ngày sinh  </th>
-                                                            <th>Quê quán</th>
-                                                            <th>Email</th>
-                                                            <th>Giới tính</th>
+                                                            <th>Mã Khoa</th>
+                                                            <th>Tên Khoa </th>
+                                                            <th>Ngày thành lập  </th>
                                                             <th> Chỉnh sửa</th>
                                                         </tr>
                                                     </thead>
@@ -228,40 +203,31 @@ else{
                                                
                                                     <tbody>
                                                     <?php
-                                                    $sql_sv='';
-                                                    if( isset( $_GET['search']) && $_GET['search']!='' ){
-                                                      $key_seach= $_GET['search'];
-                                                      $sql_sv="select * from dbo_sinhvien where MaSV like '%".$key_seach."%' ";
-                                                    }
-                                                    else{
-                                                    $sql_sv="select * from dbo_sinhvien where malop= '".$malop."'";
-                                                    }
+                                                    $sql_khoa='';
+                                                   if( isset( $_GET['search']) && $_GET['search']!='' ){
+                                                     $key_seach= $_GET['search'];
+                                                     $sql_khoa="select * from dbo_khoa where tenkhoa like '%".$key_seach."%' ";
+                                                   }
+                                                   else{
+                                                    $sql_khoa="select * from dbo_khoa ";
+                                                   }
+                                                    
                                                     $id=1;
-                                                    $list_sv= executeResult($sql_sv);
-                                                    // if( empty($list_sv)){
-                                                    //     echo ' Không có sinh viên';
-                                                    // }
-                                                    foreach( $list_sv as $sv){
-                                                        $gioitinh;
-                                                        if( $sv['GioiTinh']==1 ){
-                                                                    $gioitinh="Nam";
-                                                        }
-                                                        else{
-                                                            $gioitinh="Nữ";
-                                                        }
+                                                    $list_khoa= executeResult($sql_khoa);
+                                                    
+                                                    foreach( $list_khoa as $k){
+                                                       
                                                         echo '
                                                         <tr>
                                                         <td>' .($id++). '</td>
-                                                        <td style="display:none">' .$sv['id_sv']. '</td>
-                                                        <td>' .$sv['MaSV']. '</td>
-                                                        <td>'.$sv['Holot'].' '. $sv['Ten'].'</td>
+                                                        <td style="display:none">' .$k['id_khoa']. '</td>
+                                                        <td>' .$k['MaKhoa']. '</td>
+                                                        <td>'.$k['TenKhoa'].' </td>
                                                         
-                                                        <td>' .$sv['NgaySinh'].'</td>
-                                                        <td>' .$sv['QueQuan'].'</td>
-                                                        <td>' .$sv['Email'].'</td>
-                                                        <td>' .$gioitinh.'</td>
-                                                        <td> <button style="border-radius:4px;" onclick=\'window.open("add_sv.php?id='.$sv['id_sv'].'","_self")\'> <i class="fa fa-edit" style="color:#0066ff"></i> </button> &nbsp;&nbsp;
-                                                         <button style="border-radius:4px;"  onclick="deleteStudent('.$sv['id_sv'].')"><i class="fa fa-remove" style="color:#0066ff"></i> </button></td>
+                                                        <td>' .$k['NgayTL'].'</td>
+                                                       
+                                                        <td> <button style="border-radius:4px;" onclick=\'window.open("add_khoa.php?id='.$k['MaKhoa'].'","_self")\'> <i class="fa fa-edit" style="color:#0066ff"></i> </button> &nbsp;&nbsp;
+                                                         <button style="border-radius:4px;"  onclick="deletekhoa('.$k['MaKhoa'].')"><i class="fa fa-remove" style="color:#0066ff"></i> </button></td>
                                                         <tr>';
 
                                                     }
@@ -275,14 +241,14 @@ else{
                                         </div>
 
                                         <script type="text/javascript">
-                                                    function deleteStudent(id_sv){
-                                                        option = confirm("Ban muốn xóa sinh viên này không")
+                                                    function deletekhoa(makhoa){
+                                                        option = confirm("Ban muốn xóa khoa này không")
                                                         if( !option){
                                                             return;
                                                         }
                                                         
-                                                        $.post('delete_sv.php',{
-                                                            'id':id_sv
+                                                        $.post('delete_khoa.php',{
+                                                            'id':makhoa
                                                         },function(data){
                                                             alert(data);
                                                             location.reload()
@@ -302,7 +268,4 @@ else{
         </div>
 </body>
 
-</html>
-<?php 
- require "footer.php";
-?>
+

@@ -4,7 +4,6 @@
 
 
 <?php
-
 require "header.php";
 require_once "dbhelp.php";
 
@@ -22,7 +21,7 @@ else{
             <div class="col-md-3 left_col">
                 <div class="left_col scroll-view">
                     <div class="navbar nav_title" style="border: 0;">
-                        <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>Trang quản trị</span></a>
+                        <a href="index.php" class="site_title"><i class="fa fa-paw"></i> <span>Trang quản trị</span></a>
                     </div>
 
                     <div class="clearfix"></div>
@@ -33,7 +32,7 @@ else{
                             <img src="images/img.jpg" alt="..." class="img-circle profile_img">
                         </div>
                         <div class="profile_info">
-                            <span>Welcome,</span>
+                            <span>Xin chào,</span>
                             <h2><?php echo $_SESSION["username"]?></h2>
                         </div>
                     </div>
@@ -44,45 +43,35 @@ else{
                     <!-- sidebar menu -->
                     <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
                         <div class="menu_section">
-                            <h3>General</h3>
+                            <h3>Chung</h3>
                             <ul class="nav side-menu">
                                 <li><a href="index.php"><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
 
                                 </li>
-                                <li><a><i class="fa fa-edit"></i> Forms <span class="fa fa-chevron-down"></span></a>
+                                <li><a><i class="fa fa-book"></i> Giảng dạy <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
-                                        <li><a href="form.html">General Form</a></li>
-                                        <li><a href="form_advanced.html">Advanced Components</a></li>
-                                        <li><a href="form_validation.html">Form Validation</a></li>
-                                        <li><a href="form_wizards.html">Form Wizard</a></li>
-                                        <li><a href="form_upload.html">Form Upload</a></li>
-                                        <li><a href="form_buttons.html">Form Buttons</a></li>
+                                        <li><a href="lopchuyen_nganh.php">Lớp chuyên ngành</a></li>
+                                        <li><a href="lophocphan.php">Lớp học phần</a></li>
+                                        <li><a href="monhoc.php">Môn học</a></li>
                                     </ul>
                                 </li>
-                                <li><a><i class="fa fa-desktop"></i> UI Elements <span class="fa fa-chevron-down"></span></a>
+                                <li><a><i class="fa fa-desktop"></i> Tin tức <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
-                                        <li><a href="general_elements.html">General Elements</a></li>
-                                        <li><a href="media_gallery.html">Media Gallery</a></li>
-                                        <li><a href="typography.html">Typography</a></li>
-                                        <li><a href="icons.html">Icons</a></li>
-                                        <li><a href="glyphicons.html">Glyphicons</a></li>
-                                        <li><a href="widgets.html">Widgets</a></li>
-                                        <li><a href="invoice.html">Invoice</a></li>
-                                        <li><a href="inbox.html">Inbox</a></li>
-                                        <li><a href="calendar.html">Calendar</a></li>
+                                        
+                                        <li><a href="tintuc.php">Thông báo tin</a></li>
                                     </ul>
                                 </li>
                                 <li><a><i class="fa fa-group" style="color:white; font-size:20px"></i>Người dùng <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
                                         <li><a href="sinhvien.php">Sinh viên</a></li>
-                                        <li><a href="media_gallery.html">Giảng viên</a></li>
+                                        <li><a href="giangvien.php">Giảng viên</a></li>
 
                                     </ul>
                                 </li>
-                                <li><a><i class="fa fa-table"></i> Tables <span class="fa fa-chevron-down"></span></a>
+                                <li><a><i class="fa fa-table"></i> Khoa - viện <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
-                                        <li><a href="tables.html">Tables</a></li>
-                                        <li><a href="tables_dynamic.html">Table Dynamic</a></li>
+                                        <li><a href="khoavien.php">Khoa - viện</a></li>
+                                       
                                     </ul>
                                 </li>
 
@@ -145,17 +134,17 @@ else{
                                         <a class="dropdown-item">
                                             <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
                                             <span>
-                          <span>John Smith</span>
+                          <span><?php echo $_SESSION['username']?></span>
                                             <span class="time">3 mins ago</span>
                                             </span>
                                             <span class="message">
-                          Film festivals used to be do-or-die moments for movie makers. They were where...
+                         Thông báo 
                         </span>
 
                                             <li class="nav-item">
                                                 <div class="text-center">
                                                     <a class="dropdown-item">
-                                                        <strong>See All Alerts</strong>
+                                                        <strong>Xem tất cả</strong>
                                                         <i class="fa fa-angle-right"></i>
                                                     </a>
                                                 </div>
