@@ -7,6 +7,7 @@
 require "header.php";
 require_once "dbhelp.php";
 
+
 if(isset($_SESSION['username'])){
     
 }
@@ -14,7 +15,7 @@ else{
     exit();
 }
 ?>
-
+<html>
 <body class="nav-md">
     <div class="container body">
         <div class="main_container">
@@ -158,18 +159,45 @@ else{
             <!-- /top navigation -->
         </div>
 
+        <!-- Code ---->
+
         <div class="right_col" role="main">
                 <div class="">
                         <div style="width:auto">
                             <div style="width:60%;float:left">
-                            <div>
-                           <button  onclick="window.open('add_khoa.php','_seft')"> Thêm khoa</button>
-                           </div>
+                                <form action="<?php echo $_SERVER["PHP_SELF"];?>" method="post">
+                                    <label for ="class" style="font-size: 16px">Chọn khoa</label>
+                                    <select name="khoa" style="height:25px;font-size:14px" >
+                                        <?php 
+                                         $khoa;
+                                         if(isset($_POST["khoa"])){
+                                             $khoa=$_POST["khoa"];
+                                         } 
+                                         else{
+                                             $khoa="";
+                                         }
+                                        $sql_khoa="select * from dbo_khoa order by Makhoa";
+                                        $list_k= executeResult($sql_khoa);
+                                        foreach( $list_k as $k){
+                                            echo '
+                                            <option value="'.$k['MaKhoa'].'"; style="font-size:14px" 
+                                            ';
+                                            if($k['MaKhoa']==$khoa){
+                                                echo "selected";
+                                            }
+                                            echo '> '.$k['TenKhoa'].' </option>';
+                                        }
+                                        
+                                        ?>
+                                    
+                                    </select>
+                                    <button type="submit"> Hiển thị</button>
+                                </form>
                             </div>
                             <form method="get">
                             <div class="input-group" style="width:25%;float:right;" >
                                 <div class="form-outline">
-                                    <input id="search-input" type="search" id="form1" name="search" class="form-control" placeholder="Tìm theo tên" />
+                                    <input id="search-input" type="search" id="form1" name="search" class="form-control" placeholder="Tìm theo tên môn học" />
                                 
                                 </div>
                                 <button id="search-button" type="submit" class="btn btn-primary">
@@ -183,7 +211,9 @@ else{
                     
                    
                     <div class="clearfix"></div>
-                    
+                    <div>
+                           <button  onclick="window.open('add_monhoc.php','_seft')"> Thêm môn học</button>
+                       </div>
                     <div class="row">
                         <div class="col-md-12 col-sm-12 ">
                             
@@ -193,9 +223,12 @@ else{
                                                         <tr>
                                                             <th> STT</th>
                                                             <th style="display:none">Id </th>
-                                                            <th>Mã Khoa</th>
-                                                            <th>Tên Khoa </th>
-                                                            <th>Ngày thành lập  </th>
+                                                            <th>Mã môn học</th>
+                                                            <th>Tên môn học</th>
+                                                            <th>Số tín chỉ  </th>
+                                                            <th>Số tiết LT</th>
+                                                            <th>Số tiết TH</th>
+                                                            <th>Học phí</th>
                                                             <th> Chỉnh sửa</th>
                                                         </tr>
                                                     </thead>
@@ -203,31 +236,35 @@ else{
                                                
                                                     <tbody>
                                                     <?php
-                                                    $sql_khoa='';
+                                                    $sql_monhoc='';
                                                    if( isset( $_GET['search']) && $_GET['search']!='' ){
                                                      $key_seach= $_GET['search'];
-                                                     $sql_khoa="select * from dbo_khoa where tenkhoa like '%".$key_seach."%' ";
+                                                     $sql_monhoc="SELECT * FROM dbo_monhoc mh inner join dbo_nhomhocphi hp on hp.MaNhomHP= mh.MaNhomHP where  TenMH like '%".$key_seach."%' ";
                                                    }
                                                    else{
-                                                    $sql_khoa="select * from dbo_khoa ";
+                                                    $sql_monhoc="SELECT * FROM dbo_monhoc mh inner join dbo_nhomhocphi hp on hp.MaNhomHP= mh.MaNhomHP where makhoa= '".$khoa."'";
                                                    }
                                                     
                                                     $id=1;
-                                                    $list_khoa= executeResult($sql_khoa);
-                                                    
-                                                    foreach( $list_khoa as $k){
+                                                    $list_mh= executeResult($sql_monhoc);
+                                                    // if( empty($list_sv)){
+                                                    //     echo ' Không có giảng viên';
+                                                    // }
+                                                    foreach( $list_mh as $mh){
                                                        
                                                         echo '
                                                         <tr>
                                                         <td>' .($id++). '</td>
-                                                        <td style="display:none">' .$k['id_khoa']. '</td>
-                                                        <td>' .$k['MaKhoa']. '</td>
-                                                        <td>'.$k['TenKhoa'].' </td>
+                                                        <td style="display:none">' .$mh['id_monhoc']. '</td>
+                                                        <td>' .$mh['MaMH']. '</td>
+                                                        <td>'.$mh['TenMH'].' </td>
                                                         
-                                                        <td>' .$k['NgayTL'].'</td>
-                                                       
-                                                        <td> <button style="border-radius:4px;" onclick=\'window.open("add_khoa.php?id='.$k['id_khoa'].'","_self")\'> <i class="fa fa-edit" style="color:#0066ff"></i> </button> &nbsp;&nbsp;
-                                                        <button style="border-radius:4px;" ><a href="delete_khoa.php?id='.$k['id_khoa'].'"><i class="fa fa-remove" style="color:#0066ff" > </i> </button></td>
+                                                        <td>' .$mh['SoTC'].'</td>
+                                                        <td>' .$mh['SoTietLT'].'</td>
+                                                        <td>' .$mh['SoTietTH'].'</td>
+                                                        <td>' .$mh['MucHocPhi'].'</td>
+                                                        <td> <button style="border-radius:4px;" onclick=\'window.open("add_giangvien.php?id='.$mh['id_monhoc'].'","_self")\'> <i class="fa fa-edit" style="color:#0066ff"></i> </button> &nbsp;&nbsp;
+                                                         <button style="border-radius:4px;"  onclick="deleteTeacher('.$mh['id_monhoc'].')"><i class="fa fa-remove" style="color:#0066ff"></i> </button></td>
                                                         <tr>';
 
                                                     }
@@ -236,20 +273,19 @@ else{
                                             
                                                     </tbody>
                                                 </table>
-   
-                                                
+                                               
                                             </div>
                                         </div>
 
                                         <script type="text/javascript">
-                                                    function deletekhoa(id_khoa){
-                                                        option = confirm("Ban muốn xóa khoa này không")
+                                                    function deleteTeacher(id_gv){
+                                                        option = confirm("Ban muốn xóa giảng viên  này không")
                                                         if( !option){
                                                             return;
                                                         }
                                                         
-                                                        $.post('delete_khoa.php',{
-                                                            'id':id_khoa
+                                                        $.post('delete_gv.php',{
+                                                            'id':id_gv
                                                         },function(data){
                                                             alert(data);
                                                             location.reload()
@@ -267,6 +303,11 @@ else{
             </div>
             
         </div>
-</body>
 
+    
+</body>
+</html>
+<?php 
+ require "footer.php";
+?>
 

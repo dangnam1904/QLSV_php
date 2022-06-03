@@ -4731,3 +4731,25 @@ insert into dbo_monhoc(MaMH,MaKhoa,MaNhomHP,TenMH,SoTC,SoTietLT,SoTietTH) values
 ('INF30043','TECH', 'NHP003','Hệ thống thông tin quản lí',3,35,0),
 ('INF30045','TECH', 'NHP003','Khai phá dữ liệu',3,35,10),
 ('INF30046','TECH', 'NHP003','Kiến trúc phần mềm',3,35,0);
+
+use qldt;
+update dbo_sinhvien set MatKhau='c4ca4238a0b923820dcc509a6f75849b' where id_sv>2;
+update dbo_giangvien set MatKhau='c4ca4238a0b923820dcc509a6f75849b'where id_gv>0;
+create table admin(
+ id int(4) primary key auto_increment,
+ TenDN varchar(20),
+ MatKhau varchar(50)
+);
+insert into admin(TenDN,MatKhau) values
+('admin','c4ca4238a0b923820dcc509a6f75849b');
+
+create table tintuc(
+id_tintuc int(5) auto_increment primary key,
+TieuDe text,
+NoiDung longtext,
+Anh varchar(100)
+);
+alter table tintuc rename dbo_tintuc;
+alter table admin rename dbo_admin;
+
+

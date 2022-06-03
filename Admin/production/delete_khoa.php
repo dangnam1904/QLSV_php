@@ -1,9 +1,11 @@
 <?php
 require_once('dbhelp.php');
 
-if( isset($_POST['id'])){
-    $id = $_POST['id'];
-    $sql= 'delete from dbo_khoa where makhoa='.$id;
+if( isset($_GET['id'])){
+    $id = $_GET['id'];
+   
+    $sql= "delete from dbo_khoa where id_khoa='.$id.'";
     execute($sql);
-    echo "Xóa thành công";
+    
+    header("Location: khoavien.php");
 }
