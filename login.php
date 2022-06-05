@@ -118,9 +118,9 @@ require "header.php";?>
 ?>
 	</div>
 </div>
-<?php  
+<!-- <?php  
  $d=md5('1');
  echo $d
-?>
+?> -->
 
 <?php require "footer.php";?>

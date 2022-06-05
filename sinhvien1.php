@@ -175,7 +175,12 @@
 					<th>Ngày Sinh</th>
 					<th>Quê quán</th>
 					<th>Email</th>	
-					<th>Chỉnh sửa</th>					
+					<?php
+					if($_SESSION["Type"]=="gv"){
+						echo '<th>Chỉnh sửa</th>	';
+					}
+					?>
+									
 				</tr>  
 			 </thead>
 			 <!-- end in tiêu đề-->
@@ -195,8 +200,13 @@
 							echo "<td>".$row["QueQuan"]."</td>";
 							echo "<td>".$row["Email"]."</td>";
 							echo "<td>"; 
-								echo "<button type='submit' formmethod='post' form='frmNoAction' name='MaSV' value='".$row["MaSV"]."' formaction='sinhvien_edit.php?sid=".session_id()."'><img src='".IMAGES_DIR."/edit.png' /></button>";
+							
+								if($_SESSION["Type"]=="gv"){
+									echo "<button type='submit' formmethod='post' form='frmNoAction' name='MaSV' value='".$row["MaSV"]."' formaction='sinhvien_edit.php?sid=".session_id()."'><img src='".IMAGES_DIR."/edit.png' /></button>";
 								echo "&nbsp; <button type='submit' name='btnXoa' value='".$row["MaSV"]."' onclick='return confirmDelete(this.value);'><img src='".IMAGES_DIR."/delete.png' /></button>";								
+								}
+								
+								
 							echo "</td>";
 						echo "</tr>";
 					}
