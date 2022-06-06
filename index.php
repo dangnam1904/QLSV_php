@@ -15,7 +15,8 @@
 	 $result = $db->query($sql);
 	if ($result){
 	while($row = $result->fetch_array()){
-		echo '<h3 style="marign-left:30px"><a href="tintuc?id='.$row['id_tintuc'].'""> '.$row['TieuDe'].'</h3> ';
+		echo '<h3 style="margin-left: 30px;"><a href="tintuc.php?id='.$row['id_tintuc'].'""> '.$row['TieuDe'].'</h3> ';
+		
 		}
 	}
 	?>
