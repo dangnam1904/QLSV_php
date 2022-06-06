@@ -81,13 +81,9 @@
 						<div class="group-box-content">
 						<ul>							
 							<li> <a href="https://vinhuni.edu.vn/trang-chu.html">Trường Đại học Vinh</a> </li>
-							<li> <a href="index.php">Link 2</a> </li>
-							<li> <a href="index.php">Link 3</a> </li>
-							<li> <a href="index.php">Link 4</a> </li>
-							<li> <a href="index.php">Link 5</a> </li>
-							<li> <a href="index.php">Link 6</a> </li>
-							<li> <a href="index.php">Link 7</a> </li>
-						</ul>						
+							<li> <a href="https://www.facebook.com/DaiHocVinh">Trang trường</a> </li>
+							<li> <a href="index.php">Trang chủ</a> </li>
+							
 						</div>						
 				</div>				 
 			</div> <!-- End of Left Side -->
